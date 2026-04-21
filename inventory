@@ -1,0 +1,14 @@
+[prometheus]
+monitor ansible_host=10.0.0.206
+
+[node_exporter]
+monitor ansible_host=10.0.0.206
+node10 ansible_host=10.0.0.208
+
+
+[alertmanager]
+monitor ansible_host=10.0.0.206
+
+[grafana]
+monitor ansible_host=10.0.0.206
+

@@ -1,0 +1,148 @@
+---
+groups:
+- name: infra.rules
+  rules:
+
+  # 🔴 DOWN (toujours critique)
+  - alert: InstanceDown
+    expr: up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} DOWN"
+      description: "{{ $labels.instance }} is down."
+
+  # 🟡 CPU warning
+  - alert: HighCPUUsageWarning
+    expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 75
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "CPU warning on {{ $labels.instance }}"
+      description: "CPU > 75% for 10 minutes."
+
+  # 🔴 CPU critical
+  - alert: HighCPUUsageCritical
+    expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "CPU critical on {{ $labels.instance }}"
+      description: "CPU > 90% for 5 minutes."
+
+  # 🟡 RAM warning
+  - alert: HighMemoryUsageWarning
+    expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) < 0.2
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "RAM warning on {{ $labels.instance }}"
+      description: "Memory > 80%."
+
+  # 🔴 RAM critical
+  - alert: HighMemoryUsageCritical
+    expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) < 0.1
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "RAM critical on {{ $labels.instance }}"
+      description: "Memory > 90%."
+
+  # 🟡 Disk warning
+  - alert: DiskUsageWarning
+    expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"}) < 0.2
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Disk warning on {{ $labels.instance }}"
+      description: "Less than 20% disk left."
+
+  # 🔴 Disk critical
+  - alert: DiskUsageCritical
+    expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"}) < 0.1
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Disk critical on {{ $labels.instance }}"
+      description: "Less than 10% disk left."
+
+
+- name: network.rules
+  rules:
+
+  # 🔴 endpoint down
+  - alert: EndpointDown
+    expr: probe_success == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Endpoint {{ $labels.instance }} down"
+      description: "Endpoint unreachable."
+
+  # 🟡 latence warning
+  - alert: EndpointLatencyWarning
+    expr: avg_over_time(probe_duration_seconds[5m]) > 0.3
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Latency warning on {{ $labels.instance }}"
+      description: "Latency > 300ms."
+
+  # 🔴 latence critique
+  - alert: EndpointLatencyCritical
+    expr: avg_over_time(probe_duration_seconds[5m]) > 0.5
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Latency critical on {{ $labels.instance }}"
+      description: "Latency > 500ms."
+
+  # 🟡 erreurs réseau
+  - alert: NetworkErrorsWarning
+    expr: rate(node_network_receive_errs_total[5m]) > 1
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Network errors on {{ $labels.instance }}"
+      description: "Some network errors detected."
+
+  # 🔴 erreurs critiques
+  - alert: NetworkErrorsCritical
+    expr: rate(node_network_receive_errs_total[5m]) > 10
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High network errors on {{ $labels.instance }}"
+      description: "High error rate."
+
+  # 🟡 packet drop
+  - alert: PacketDropsWarning
+    expr: rate(node_network_receive_drop_total[5m]) > 1
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Packet drops on {{ $labels.instance }}"
+      description: "Some packet loss."
+
+  # 🔴 packet drop critique
+  - alert: PacketDropsCritical
+    expr: rate(node_network_receive_drop_total[5m]) > 10
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High packet drops on {{ $labels.instance }}"
+      description: "Significant packet loss."

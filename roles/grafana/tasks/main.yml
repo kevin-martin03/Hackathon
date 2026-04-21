@@ -1,0 +1,130 @@
+---
+- name: Ensure dependencies are installed
+  apt:
+    name:
+      - git
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Download Grafana GPG key
+  ansible.builtin.get_url:
+    url: https://packages.grafana.com/gpg.key
+    dest: /usr/share/keyrings/grafana-archive-keyring.gpg
+    mode: '0644'
+
+- name: Add Grafana APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/grafana-archive-keyring.gpg] https://packages.grafana.com/oss/deb stable main"
+    state: present
+
+- name: Install Grafana
+  ansible.builtin.apt:
+    name: grafana={{ version }}
+    state: present
+    update_cache: yes
+
+- name: Grafana configuration file copy
+  ansible.builtin.template:
+    src: "grafana.conf.j2"
+    dest: /etc/grafana/grafana.ini
+  notify: event_restart_grafana
+
+- name: Create dashboards directory
+  file:
+    path: /var/lib/grafana/dashboards
+    state: directory
+    owner: grafana
+    group: grafana
+    mode: 0755
+
+- name: Download Node-Exporter-Full dashboard
+  get_url:
+    url: https://grafana.com/api/dashboards/1860/revisions/latest/download
+    dest: /var/lib/grafana/dashboards/node-exporter-full.json
+    owner: grafana
+    group: grafana
+#  notify: event_restart_grafana
+
+
+#- name: Download Grafana dashboards
+#  ansible.builtin.git:
+#    repo: https://github.com/rfmoz/grafana-dashboards.git
+#    dest: /opt/grafana-dashboards
+
+#- name: Copy dashboards
+#  ansible.builtin.copy:
+#    src: /opt/grafana-dashboards/prometheus/node-exporter-full.json
+#    dest: /var/lib/grafana/dashboards/
+#    remote_src: yes
+#  notify: event_restart_grafana
+
+###
+
+- name: Create provisioning dashboard directory
+  file:
+    path: /etc/grafana/provisioning/dashboards
+    state: directory
+    owner: grafana
+    group: grafana
+
+- name: Configure dashboard provisioning
+  copy:
+    dest: /etc/grafana/provisioning/dashboards/dashboard.yml
+    content: |
+      apiVersion: 1
+      providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          options:
+            path: /var/lib/grafana/dashboards
+
+###
+
+- name: Create datasource directory
+  file:
+    path: /etc/grafana/provisioning/datasources
+    state: directory
+    owner: grafana
+    group: grafana
+
+- name: Create datasource directory
+  file:
+    path: /etc/grafana/provisioning/datasources
+    state: directory
+    owner: grafana
+    group: grafana
+
+- name: Configure Prometheus datasource
+  copy:
+    dest: /etc/grafana/provisioning/datasources/prometheus.yml
+    content: |
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          url: http://localhost:9090
+          isDefault: true
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Start and enable Grafana server
+  ansible.builtin.service:
+    name: grafana-server
+    enabled: true
+    state: started
+
+- name: Check if Grafana is accessible
+  ansible.builtin.uri:
+    url: http://127.0.0.1:3000
+    method: GET
+    status_code: 200
+  register: result
+  retries: 10
+  delay: 5
+  until: result.status == 200
