@@ -12,7 +12,7 @@ Les machines dans la section "inventory/node_exporter" sont les machines qui von
 - 
 
 ## Installation
-ansible-playbook -i inventory playbook.yml -u ansible
+(ansible-playbook -i inventory playbook.yml -u ansible)
 
 ### Modification à faire
 Modification à faire en fonction des Nodes.
