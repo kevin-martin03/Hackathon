@@ -7,7 +7,7 @@ Les services Prometheus, Grafana, Alertmanager et Node_exporter sont sur la VM d
 Les machines dans la section **"inventory/node_exporter"** sont les machines qui vont exposer leurs métrics.
 
 ## Pré-requis
-- Avoirun laptop avec Ansible servant de Node_manager afin de gérer les déploiements.
+- Avoir un laptop avec Ansible servant de Node_manager afin de gérer les déploiements.
 - Avoir un utilisateur nommé *Ansible* sur toute les machines, le déploiement se feront via cette utilisateur.
 
 ## Installation
@@ -15,6 +15,14 @@ Les machines dans la section **"inventory/node_exporter"** sont les machines qui
 
 ### Modification à faire
 Modification à faire en fonction des Nodes.</br>
-Changer les **"noms" et "adresses IP"** dans le fichier "inventory" </br>
-Changer les targets dans le fichier de configuration Prometheus **"prometheus/templates/prometheus.conf.j2"**
+Changer les **"noms" et "adresses IP"** dans le fichier **"inventory"** </br>
+Changer les targets dans le fichier de configuration Prometheus **"prometheus/templates/prometheus.conf.j2"**</br>
+L'ajour d'alertes se fait via le fichier de configuration alertrules situté dans **"roles/prometheus/files/alertrules.yml"**
 
+### Grafana
+
+
+### Alertmanager
+Alertmanager envoie des alertes sur le discord en fonction de la criticité.</br>
+- Le channel **"Warnings"** regroupe les alertes simple selon les alertes définies dans Prometheus.</br>
+- Le channel **"Critical"** regroupe les alertes **CRITIQUE** selon les alertes définies dans **Prometheus**.</br>
