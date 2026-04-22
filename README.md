@@ -12,4 +12,5 @@ ansible-playbook -i inventory playbook.yml -u ansible
 
 ### Modification à faire
 Changer les "noms" et "adresses IP" dans le fichier "inventory"
+Changer les targets dans le fichier de configuration Prometheus "prometheus/templates/prometheus.conf.j2"
 
