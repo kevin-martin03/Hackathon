@@ -2,7 +2,7 @@
 ESGI Hackathon
 
 ## Description
-Déploiement d'une stack de monitoring Prometheus, Grafana, Node_exporter, Alertmanager.
+Déploiement d'une stack de monitoring Prometheus, Grafana, Node_exporter, Alertmanager. </br>
 Les services Prometheus, Grafana, Alertmanager et Node_exporter sont sur la VM de Monitoring.
 Les machines dans la section "inventory/node_exporter" sont les machines qui vont exposer leurs métrics.
 
