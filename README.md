@@ -20,7 +20,7 @@ Des modifications sont susceptible d'être réalisé celon vos besoin.
 Si nécessaire, changer/ajouter les **"noms" et "adresses IP"** dans le fichier **"./inventory"**. Une boucle récupère directement les IPs et noms de machine dans la section \[node_exporter] du fichier **inventory** afin de déployer node_exporter.<\br>
 
 #### Modifications des alertes
-L'ajout/modification d'alertes se fait via le fichier de configuration alertrules situé dans **"./roles/prometheus/files/alertrules.yml"**
+L'ajout/modification d'alertes se fait via le fichier de configuration alertrules.yml situé dans **"./roles/prometheus/files/alertrules.yml"**
 
 ### Grafana
 Le template Node-Exporter-Full est importé par défaut. **ID : 1860**
@@ -29,3 +29,4 @@ Le template Node-Exporter-Full est importé par défaut. **ID : 1860**
 Alertmanager envoie des alertes sur le discord en fonction de la criticité.</br>
 - Le channel **"Warnings"** regroupe les alertes simple selon les alertes définies dans Prometheus.</br>
 - Le channel **"Critical"** regroupe les alertes **CRITIQUE** selon les alertes définies dans **Prometheus**.</br>
+
