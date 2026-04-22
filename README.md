@@ -14,15 +14,16 @@ Les machines dans la section **"inventory/node_exporter"** sont les machines qui
 `ansible-playbook -i inventory playbook.yml -u ansible`
 
 ### Modification à faire
-#### Modification à faire en fonction des Nodes.</br>
-Changer les **"noms" et "adresses IP"** dans le fichier **"inventory"** </br>
-Changer les targets dans le fichier de configuration Prometheus **"prometheus/templates/prometheus.conf.j2"**</br></br>
+Des modifications sont susceptible d'être réalisé celon vos besoin.
 
-#### 
-L'ajour d'alertes se fait via le fichier de configuration alertrules situté dans **"roles/prometheus/files/alertrules.yml"**
+#### Modification sur les Nodes.</br>
+Si nécessaire, changer/ajouter les **"noms" et "adresses IP"** dans le fichier **"./inventory"**. Une boucle récupère directement les IPs et noms de machine dans la section \[node_exporter] du fichier **inventory** afin de déployer node_exporter.<\br>
+
+#### Modifications des alertes
+L'ajout/modification d'alertes se fait via le fichier de configuration alertrules situé dans **"./roles/prometheus/files/alertrules.yml"**
 
 ### Grafana
-
+Le template Node-Exporter-Full est importé par défaut. **ID : 1860**
 
 ### Alertmanager
 Alertmanager envoie des alertes sur le discord en fonction de la criticité.</br>
