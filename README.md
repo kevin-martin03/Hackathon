@@ -14,9 +14,11 @@ Les machines dans la section **"inventory/node_exporter"** sont les machines qui
 `ansible-playbook -i inventory playbook.yml -u ansible`
 
 ### Modification à faire
-Modification à faire en fonction des Nodes.</br>
+#### Modification à faire en fonction des Nodes.</br>
 Changer les **"noms" et "adresses IP"** dans le fichier **"inventory"** </br>
-Changer les targets dans le fichier de configuration Prometheus **"prometheus/templates/prometheus.conf.j2"**</br>
+Changer les targets dans le fichier de configuration Prometheus **"prometheus/templates/prometheus.conf.j2"**</br></br>
+
+#### 
 L'ajour d'alertes se fait via le fichier de configuration alertrules situté dans **"roles/prometheus/files/alertrules.yml"**
 
 ### Grafana
