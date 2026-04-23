@@ -9,6 +9,7 @@ Les machines dans la section **"inventory/node_exporter"** sont les machines qui
 ## Pré-requis
 - Avoir un laptop avec Ansible servant de Node_manager afin de gérer les déploiements.
 - Avoir un utilisateur nommé *Ansible* sur toute les machines, le déploiement se feront via cette utilisateur.
+- Créer une paire de clés RSA. Ajouter sa clé public dans **./ssh/authorized_keys** des VMs contenant l'utilisteur *Ansible*
 
 ## Installation
 `ansible-playbook -i inventory playbook.yml -u ansible`
