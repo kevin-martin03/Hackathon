@@ -15,7 +15,7 @@ Les machines dans la section **"inventory/node_exporter"** sont les machines qui
 `ansible-playbook -i inventory playbook.yml -u ansible`
 
 ### Modification à faire
-Des modifications sont susceptible d'être réalisé celon vos besoin.
+Des modifications sont susceptible d'être réalisé selon vos besoin.
 
 #### Modification sur les Nodes.</br>
 Si nécessaire, changer/ajouter les **"noms" et "adresses IP"** dans le fichier **"./inventory"**. Une boucle récupère directement les IPs et noms de machine dans la section \[node_exporter] du fichier **inventory** afin de déployer node_exporter.
